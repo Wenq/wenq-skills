@@ -1,0 +1,30 @@
+{
+  "name": "wenq-skills",
+  "version": "1.0.0",
+  "description": "个人 Skills 集合 - 支持 Qoder、Trae、Cursor 等 IDE",
+  "author": "Alan",
+  "license": "MIT",
+  "bin": {
+    "wenq-skills": "./bin/cli.js"
+  },
+  "keywords": [
+    "skills",
+    "qoder",
+    "trae",
+    "cursor",
+    "ai-assistant",
+    "weekly-report"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/wenq-skills"
+  },
+  "files": [
+    "bin/",
+    "skills/",
+    "install.sh"
+  ],
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
