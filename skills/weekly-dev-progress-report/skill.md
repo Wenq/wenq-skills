@@ -1,11 +1,6 @@
 ---
 name: weekly-dev-progress-report
 description: 根据用户录入的开发工作内容自动生成格式化的周开发进度汇报。当用户需要整理开发进度、生成进度汇报或提到"开发进度"、"进度汇报"、"dev progress"时使用此技能。
-license: MIT
-metadata:
-  version: 1.0.0
-  author: Developer
-  tags: [productivity, report, development, progress]
 ---
 
 # 周开发进度汇报生成助手

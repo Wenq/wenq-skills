@@ -1,11 +1,6 @@
 ---
 name: weekly-report
 description: 根据用户录入的周工作内容自动生成格式化工作周报。当用户需要整理周报、生成周报或提到"周报"、"weekly report"时使用此技能。
-license: MIT
-metadata:
-  version: 1.0.0
-  author: Alan
-  tags: [productivity, report, weekly]
 ---
 
 # 周报生成助手
