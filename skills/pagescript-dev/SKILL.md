@@ -441,6 +441,17 @@ customEvent(e) {
 
 ## 代码生成规则
 
+### 严格约束（最高优先级）
+
+**禁止凭空猜测或编造 API / 事件 / 接口！** 所有生成的代码必须严格基于本文档中已列出的内容：
+
+1. **只使用本文档明确列出的 API**：包括通用控件方法（set/get/isEditable/isVisible）、字段方法（setValue/getValue/isRequired）、表单方法（getFormConfig/getFormMeta/getFormStatus/fetchData）、DOM 操作方法（on/off/getElement/wait/css）、工具类函数（loadFiles/showMessage/createStyle/loadArtTemplate）
+2. **只使用本文档明确列出的事件**：onValueChange、onClick、onItemClick、onCustomMsgEvent、onInit、onTreeNodeClick、onTreeNodeDoubleClick、onTreeNodeCheck、onTableRowClick、onTableRowDoubleClick、onCellValueChange、onSelect、onUnSelect、onSelectAll、onUnSelectAll
+3. **只使用本文档明确列出的功能接口**：表格（setCellRender/setCellEditor/setCellValue/setCellStyle/setRowStyle/setSelectRows/getRowData/getGridData/getGridState/getFocusedCell）、树（setTreeItemRender/expand/collapse/checkNodes/uncheckNodes/getParent/getAllParent/getNode/getTreeData/getTreeState）
+4. **不存在于本文档中的接口一律不得使用**，即使在其他平台或框架中存在类似接口
+5. **如果用户的需求超出本文档覆盖的 API 范围**，必须明确告知用户"当前页面脚本不支持该功能"或"该接口未在文档中提供，建议通过自定义控件或服务端插件实现"，而不是猜测可能存在的接口
+6. **Render 函数的 props 参数**只能使用文档中明确列出的属性（如 value/originValue/rowIndex/record/renderProps/Render/parentElement/isCellLock 等），不得假设存在其他未列出的属性
+
 ### 必须遵循
 1. **所有主要逻辑写在 didMount 中**
 2. **回调函数必须使用箭头函数**保证 this 指向正确
