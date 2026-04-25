@@ -1,14 +1,14 @@
 # 苍穹页面脚本代码模板
 
-## 基础模板
+每个模板标注了**场景标签**，与 SKILL.md 中的需求路由决策树对应。
 
-最小化的页面脚本结构：
+## 基础模板
+**场景**：所有场景的起始结构
 
 ```javascript
 /**
  * 单据初始化函数
- * 执行初始化相关事务，比如注册组件事件监听、设置数据、执行DOM操作等
- * 此函数在单据加载服务端插件后自动调用
+ * 在单据加载服务端插件后、业务数据加载完成后自动调用
  */
 function didMount() {
   // 在此编写业务逻辑
@@ -16,8 +16,7 @@ function didMount() {
 
 /**
  * 单据卸载函数
- * 执行资源释放等事务，比如移除DOM事件监听/定时器、销毁UI元素、删除全局变量等
- * 此函数在单据关闭(销毁)时自动调用
+ * 在单据关闭(销毁)时自动调用
  */
 function willUnmount() {
   // 资源释放
@@ -25,10 +24,10 @@ function willUnmount() {
 ```
 
 ## 字段值监听模板
+**场景**：字段值变化/联动 → `onValueChange`
 
 ```javascript
 function didMount() {
-  // 监听字段值变化
   this.$('字段标识').onValueChange((data) => {
     const { key, newValue, oldValue } = data
     // 处理值变化逻辑
@@ -37,10 +36,10 @@ function didMount() {
 ```
 
 ## 按钮点击模板
+**场景**：按钮点击 → `onClick`
 
 ```javascript
 function didMount() {
-  // 监听按钮点击
   this.$('按钮标识').onClick((data) => {
     // 处理点击逻辑
   })
@@ -48,10 +47,10 @@ function didMount() {
 ```
 
 ## 工具栏点击模板
+**场景**：工具栏/页签操作 → `onItemClick`
 
 ```javascript
 function didMount() {
-  // 监听工具栏按钮点击
   this.$('工具栏标识').onItemClick((data) => {
     // data 包含按钮标识和操作代码
   })
@@ -59,6 +58,7 @@ function didMount() {
 ```
 
 ## 字段联动模板
+**场景**：字段值变化/联动 → `onValueChange` + `setValue`
 
 ```javascript
 function didMount() {
@@ -76,6 +76,7 @@ function processValue(value) {
 ```
 
 ## 样式修改模板
+**场景**：样式修改 → `css()` / `createStyle`
 
 ```javascript
 function didMount() {
@@ -88,6 +89,8 @@ function didMount() {
 ```
 
 ## 表格单元格自定义渲染模板（查看态）
+**场景**：表格自定义渲染（查看态）→ `setCellRender`
+**参考**：`rules/render-reference.md`
 
 ```javascript
 function didMount() {
@@ -98,7 +101,6 @@ function didMount() {
 
 const customCellRender = (props) => {
   const { value, originValue, rowIndex, record, renderProps, Render, isCellLock } = props
-  // 返回自定义 React 元素
   return (
     <div style={{display:'flex', alignItems:'center'}}>
       <span>{value}</span>
@@ -108,6 +110,8 @@ const customCellRender = (props) => {
 ```
 
 ## 表格单元格自定义渲染模板（编辑态）
+**场景**：表格自定义渲染（编辑态）→ `setCellEditor`
+**参考**：`rules/render-reference.md`
 
 ```javascript
 function didMount() {
@@ -133,6 +137,8 @@ const customCellEditor = (props) => {
 ```
 
 ## 树节点自定义渲染模板
+**场景**：树节点自定义渲染 → `setTreeItemRender`
+**参考**：`rules/render-reference.md`
 
 ```javascript
 let self
@@ -151,7 +157,7 @@ function TreeItemRender(props) {
   const { Render, text, style = {}, ...others } = props
   const onClick = (event) => {
     event.preventDefault()
-    // 自定义逻辑
+    // 自定义逻辑（需用 self 访问脚本上下文）
   }
   const extElement = (
     <span onClick={onClick} className="treeNodeExt"
@@ -164,18 +170,19 @@ function TreeItemRender(props) {
 ```
 
 ## 服务端通信模板
+**场景**：与服务端通信 → `fetchData`
+**参考**：`rules/communication-reference.md`
 
+**前端脚本：**
 ```javascript
 function didMount() {
-  // 前端发送请求
   this.fetchData('methodName', {param1: 'value1'}).then((result) => {
-    // 处理服务端返回的数据
     console.log(result)
   })
 }
 ```
 
-对应的服务端 KS 脚本：
+**服务端 KS 脚本：**
 ```javascript
 customEvent(e) {
   const key = e.getKey()
@@ -183,7 +190,6 @@ customEvent(e) {
   const eventArgs = e.getEventArgs()
   if (key === '__clientRequest__') {
     if (eventName === 'methodName') {
-      // 处理业务逻辑，通过 setPageJSData 返回数据
       this.getView().getClientProxy().addAction('setPageJSData', {
         name: 'resultKey',
         args: { /* 返回数据 */ }
@@ -194,6 +200,8 @@ customEvent(e) {
 ```
 
 ## 自定义控件通信模板
+**场景**：与自定义控件通信 → `invoke` + `onCustomMsgEvent`
+**参考**：`rules/communication-reference.md`
 
 ```javascript
 function didMount() {
@@ -207,12 +215,12 @@ function didMount() {
     if (data.args.type === '__init__') {
       // 自定义控件初始化完成
     }
-    // 处理其他自定义消息
   })
 }
 ```
 
 ## 加载第三方资源模板
+**场景**：加载第三方资源 → `loadFiles`
 
 ```javascript
 function didMount() {
@@ -220,7 +228,6 @@ function didMount() {
     'https://cdn.example.com/lib.js',
     'https://cdn.example.com/style.css'
   ]).then((result) => {
-    // 资源加载完成后的逻辑
     console.log('资源已加载', result)
   })
 }
@@ -231,6 +238,7 @@ function willUnmount() {
 ```
 
 ## 根据单据状态控制逻辑模板
+**场景**：条件判断 → `getFormStatus`
 
 ```javascript
 function didMount() {

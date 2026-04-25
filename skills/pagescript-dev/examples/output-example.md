@@ -1,6 +1,10 @@
 # 输出示例
 
+每个示例标注了**场景标签**、**易错提醒**和对应的**反例参考**。
+
 ## 示例1：字段联动（两数求和）
+**场景**：字段值变化/联动 → `onValueChange` + `setValue`
+**易错提醒**：若字段是基础资料类型，不可使用 setValue（参考 `anti-patterns.md` 第二节）
 
 ```javascript
 /**
@@ -24,10 +28,13 @@ function willUnmount() {}
 ```
 
 > **注意**：parseInt 转换确保数值类型正确，避免字符串拼接。
+> **易错提醒**：此处字段为整数类型可用 setValue；若为基础资料类型则禁止使用。
 
 ---
 
 ## 示例2：下拉选择动态修改文字颜色
+**场景**：字段值变化/联动 + 样式修改 → `onValueChange` + DOM 操作
+**易错提醒**：DOM 结构可能随版本升级变化（参考 `anti-patterns.md`）
 
 ```javascript
 /**
@@ -64,10 +71,13 @@ function willUnmount() {}
 ```
 
 > **注意**：DOM 查询依赖 `.kd-cq-combo-selected` 样式名，版本升级可能变化。
+> **易错提醒**：回调函数必须使用箭头函数（参考 `anti-patterns.md` 第一节）。
 
 ---
 
 ## 示例3：表格单元格进度条渲染（查看态）
+**场景**：表格自定义渲染（查看态）→ `setCellRender`
+**易错提醒**：value 是格式化值，数值计算用 originValue（参考 `anti-patterns.md` 第五节）
 
 ```javascript
 /**
@@ -114,11 +124,14 @@ const progressRender = (props) => {
 function willUnmount() {}
 ```
 
-> **注意**：value 为格式化后的值，如需原始值使用 `props.originValue`。
+>> **注意**：value 为格式化后的值，如需原始值使用 `props.originValue`。
+> **易错提醒**：禁止使用文档未列出的 props 属性（参考 `anti-patterns.md` 第五节）。
 
 ---
 
 ## 示例4：树节点扩展"新增"按钮
+**场景**：树节点自定义渲染 → `setTreeItemRender` + `fetchData`
+**易错提醒**：Render 函数中 this 不可用，需用 self 变量（参考 `anti-patterns.md` 第一节）
 
 ```javascript
 let self
@@ -170,6 +183,8 @@ function willUnmount() {}
 ---
 
 ## 示例5：按钮点击与服务端通信
+**场景**：按钮点击 + 与服务端通信 → DOM `on('click')` + `fetchData`
+**参考**：`rules/communication-reference.md`
 
 **前端页面脚本：**
 ```javascript
@@ -209,6 +224,8 @@ customEvent(e) {
 ---
 
 ## 示例6：实时大小写转换
+**场景**：DOM 事件 → `on('input')` + `setValue`
+**易错提醒**：标准 onValueChange 是失焦触发，实时监听需用 DOM 原生 input 事件
 
 ```javascript
 /**
@@ -231,6 +248,8 @@ function willUnmount() {}
 ---
 
 ## 示例7：页面脚本与自定义控件双向通信
+**场景**：与自定义控件通信 → `invoke` + `onCustomMsgEvent`
+**参考**：`rules/communication-reference.md`
 
 ```javascript
 /**
@@ -257,3 +276,4 @@ function willUnmount() {}
 ```
 
 > **注意**：自定义控件内部需在 `handleDirective` 中处理 invoke 消息，通过 `this.model.triggerCustomMsgEvent` 向页面脚本发送消息。
+> **易错提醒**：回调函数必须使用箭头函数保证 this 指向（参考 `anti-patterns.md` 第一节）。
