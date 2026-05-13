@@ -51,6 +51,26 @@ description: 苍穹低代码前端页面脚本开发助手。根据用户描述�
 
 无法映射到以上任一分类 → 回到 Gate 1 拒绝。
 
+**Gate 4 — API 签名确认（生成代码前强制读取 reference，不可跳过）**
+
+根据 Gate 3 确定的分类，**必须**读取对应的 reference 文件，并输出本次将使用的 API 真实签名。这是反编造协议的关键卡口：**未执行 Gate 4 则禁止进入阶段二**。
+
+操作步骤：
+1. 用 `read_file` 读取 Gate 3 确定的参考文件（如 `rules/events-reference.md`、`rules/api-reference.md`）
+2. 在对话中显式输出读到的 API 签名（不是"已读取"，而是真实的调用方式）
+3. 确认签名与需求场景匹配后，方可进入阶段二
+
+输出格式（必须包含真实值）：
+```
+[Gate 4] 已读取 rules/events-reference.md 和 rules/api-reference.md，本次使用的 API 签名：
+  - 事件：this.$('表格标识').onCellValueChange((data) => {})  ← 来源: events-reference.md L86
+  - 设置单元格值：this.$('表格标识').setCellValue([{k:'列标识', r:行号, v:值}])  ← 来源: api-reference.md L76
+```
+
+Fail-closed：若 reference 文件中未找到需求所需的 API 签名 → 停止，回到 Gate 1 拒绝。
+
+> 本 Gate 遵循 `skills/_common/anti-fabrication.md` 的三段式协议：**读 → 输出 → 用**。任何 API 若未在 Gate 4 输出过，阶段二禁止使用。
+
 ---
 
 ### 阶段二：受控执行（代码生成）
